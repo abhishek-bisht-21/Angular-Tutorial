@@ -8,32 +8,17 @@ import {Todo} from "../../Todo"
 })
 export class TodosComponent implements OnInit {
 
+  localItem:string|null;
+
   todos:Todo[];
 
   constructor() {
-
-    this.todos = [
-      {
-        sno:3,
-        title: "This is title3",
-        desc: "Description3",
-        active: true
-      },
-
-      {
-        sno:2,
-        title: "This is title2",
-        desc: "Description2",
-        active: true
-      },
-
-      {
-        sno:1,
-        title: "This is title1",
-        desc: "Description1",
-        active: true
-      }
-    ]
+    this.localItem = localStorage.getItem("todos")
+    if(this.localItem == null){
+      this.todos = [];
+    }else{
+      this.todos = JSON.parse(this.localItem || '{}')
+    }
 
    }
 
@@ -44,11 +29,14 @@ export class TodosComponent implements OnInit {
     console.log(todo);
     const index = this.todos.indexOf(todo)
     this.todos.splice(index,1)
+    localStorage.setItem("todos", JSON.stringify(this.todos))
   }
 
 
     addTodo(todo:Todo){
     console.log(todo);
-    this.todos.push(todo);  
+    this.todos.push(todo);
+    localStorage.setItem("todos", JSON.stringify(this.todos))
+  
   }
 }
